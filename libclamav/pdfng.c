@@ -520,10 +520,12 @@ char *pdf_parse_string(struct pdf_struct *pdf, struct pdf_obj *obj, const char *
             switch (*p3) {
                 case '(':
                 case '<':
-                    res = pdf_parse_string(pdf, obj, p3, objsize2, NULL, NULL, meta);
+                    res = 
+                        pdf_parse_string(pdf, obj, p3, objsize2, NULL, NULL, meta);
                     break;
                 default:
-                    res = pdf_finalize_string(pdf, obj, begin, objsize2);
+                    res = 
+                        pdf_finalize_string(pdf, obj, begin, objsize2);
                     if (!res) {
                         res = cli_calloc(1, objsize2+1);
                         if (!(res)) {
@@ -811,23 +813,27 @@ struct pdf_dict *pdf_parse_dict(struct pdf_struct *pdf, struct pdf_obj *obj, siz
 
         switch (begin[0]) {
             case '(':
-                val = pdf_parse_string(pdf, obj, begin, objsz, NULL, &p1, NULL);
+                val = 
+                    pdf_parse_string(pdf, obj, begin, objsz, NULL, &p1, NULL);
                 begin = p1+2;
                 break;
             case '[':
-                arr = pdf_parse_array(pdf, obj, objsz, begin, &p1);
+                arr = 
+                    pdf_parse_array(pdf, obj, objsz, begin, &p1);
                 begin = p1+1;
                 break;
             case '<':
                 if ((size_t)(begin - objstart) < objsize - 2) {
                     if (begin[1] == '<') {
-                        dict = pdf_parse_dict(pdf, obj, objsz, begin, &p1);
+                        dict = 
+                            pdf_parse_dict(pdf, obj, objsz, begin, &p1);
                         begin = p1+2;
                         break;
                     }
                 }
 
-                val = pdf_parse_string(pdf, obj, begin, objsz, NULL, &p1, NULL);
+                val = 
+                    pdf_parse_string(pdf, obj, begin, objsz, NULL, &p1, NULL);
                 begin = p1+2;
                 break;
             default:
@@ -849,7 +855,8 @@ struct pdf_dict *pdf_parse_dict(struct pdf_struct *pdf, struct pdf_obj *obj, siz
 
                 is_object_reference(begin, &p1, NULL);
 
-                val = cli_calloc((p1 - begin) + 2, 1);
+                val = 
+                    cli_calloc((p1 - begin) + 2, 1);
                 if (!(val))
                     break;
 
@@ -1003,19 +1010,22 @@ struct pdf_array *pdf_parse_array(struct pdf_struct *pdf, struct pdf_obj *obj, s
         switch (begin[0]) {
             case '<':
                 if ((size_t)(begin - objstart) < objsz - 2 && begin[1] == '<') {
-                    dict = pdf_parse_dict(pdf, obj, objsz, begin, &begin);
+                    dict = 
+                        pdf_parse_dict(pdf, obj, objsz, begin, &begin);
                     begin+=2;
                     break;
                 }
 
                 /* Not a dictionary. Intentionally fall through. */
             case '(':
-                val = pdf_parse_string(pdf, obj, begin, objsz, NULL, &begin, NULL);
+                val = 
+                    pdf_parse_string(pdf, obj, begin, objsz, NULL, &begin, NULL);
                 begin += 2;
                 break;
             case '[':
                 /* XXX We should have a recursion counter here */
-                arr = pdf_parse_array(pdf, obj, objsz, begin, &begin);
+                arr = 
+                    pdf_parse_array(pdf, obj, objsz, begin, &begin);
                 begin+=1;
                 break;
             default:
